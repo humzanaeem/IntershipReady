@@ -1,14 +1,20 @@
+import os
 import streamlit as st
-
 import pandas as pd
 import plotly.express as px
+from dotenv import load_dotenv
+from apis import apod_generator
+from pprint import pprint
+
+
+load_dotenv()
 
 st.title("Water Quality Dashboard")
 st.header("Intership Ready Software Development")
 st.subheader("Prof. Gregory Reis")
 st.divider()
 
-df = pd.read_csv("biscayneBay_waterquality.csv")
+df = pd.read_csv("../biscayneBay_waterquality.csv")
 
 tab1, tab2, tab3, tab4 = st.tabs(
     ["Descriptive Statistics",
@@ -49,4 +55,12 @@ with tab3:
 
 
 with tab4:
-    st.warning("coming soon")
+    st.header("NASA' Astronomy Pictures of the Day")
+
+    # TODO : call a fumction that gerantes the APOD
+    url = "https://api.nasa.gov/planetary/apod?api_key="
+    response = apod_generator(url, os.getenv("NASA_API_KEY"))
+    print(response)
+
+    st.subheader(response["title"])
+    st.image(response["url"])
